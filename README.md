@@ -11,3 +11,6 @@ A tool for autosetting your desktop wallpaper to the artist you are listening to
 
 ## Release Versions
 Release versions use a bundled python executable made with pyinstaller so Python is not required to run. The installer is built using Nullsoft Installer.
+
+## Latest Version
+The latest version can be downloaded here: https://github.com/microsockss/lastfm-wallpaper/releases.
