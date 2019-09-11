@@ -15,7 +15,6 @@ namespace LastfmWallpaper
                 {
                     throw new ArgumentException("Python binary not found.");
                 }
-                Console.WriteLine("Using python bundled exe.");
                 // Run python bundled exe
                 Process proc = new Process();
                 proc.StartInfo.FileName = "google_images_download.exe";
@@ -24,13 +23,12 @@ namespace LastfmWallpaper
                 proc.StartInfo.UseShellExecute = true;
                 proc.Start();
                 proc.WaitForExit();
-                Console.WriteLine("Used python bundled exe.");
+                Console.WriteLine("Used python bundled exe." + "\n");
 
             }
             // Fallback to system interpreter
             catch
             {
-                Console.WriteLine("Trying with python file.");
                 Process proc = new Process();
                 // Run with source with python system interpreter
                 proc.StartInfo.FileName = "python";
@@ -40,7 +38,7 @@ namespace LastfmWallpaper
                 proc.StartInfo.Arguments = "..\\..\\..\\google_images_download\\google_images_download.py -k \"" + query + " desktop wallpaper\" -l 1";
                 proc.Start();
                 proc.WaitForExit();
-                Console.WriteLine("Used system interpreter.");
+                Console.WriteLine("Used system interpreter." + "\n");
             }
         }
     }

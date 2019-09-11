@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.IO;
 
 namespace LastfmWallpaper
 {
@@ -12,10 +13,20 @@ namespace LastfmWallpaper
         private static readonly uint SPIF_UPDATEINIFILE = 0x01;
         private static readonly uint SPIF_SENDWININICHANGE = 0x02;
 
+
         public static void SetWallpaper(string path)
         {
             SystemParametersInfo(SPI_SETDESKWALLPAPER, 0, path,
                 SPIF_UPDATEINIFILE | SPIF_SENDWININICHANGE);
+        }
+
+        public static void CopyOldWallpaper(string path)
+        {
+            if (File.Exists("oldwallpaper"))
+            {
+                File.Delete("oldwallpaper");
+            }
+            File.Copy(path, "oldwallpaper");
         }
     }
 }

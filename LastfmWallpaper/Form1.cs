@@ -9,13 +9,15 @@ using IF.Lastfm.Core.Api;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace LastfmWallpaper
 {
     public partial class Form1 : MaterialForm
     {
         private string username;
-        private string artistName;
+        private string artistName = "";
         private bool active = false;
         private bool minimizeToTray = true;
         //private IF.Lastfm.Core.Objects.LastTrack activeSong;
@@ -25,7 +27,14 @@ namespace LastfmWallpaper
         public Form1()
         {
             InitializeComponent();
+            // AllocConsole(); // Launch console for debugging
         }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool AllocConsole();
+
+
         private void MaterialRaisedButton1_Click(object sender, System.EventArgs e)
         {
             // Set bools and ui
@@ -99,6 +108,7 @@ namespace LastfmWallpaper
         private void RequestManager()
         {
             Console.WriteLine("Running");
+            Wallpaper.CopyOldWallpaper(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Themes\TranscodedWallpaper"));
             timer.Elapsed += TimerCall;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -110,13 +120,28 @@ namespace LastfmWallpaper
             if (!active)
             {
                 timer.Stop();
+                Wallpaper.SetWallpaper(Path.GetFullPath("oldwallpaper"));
             }
 
             GetRecentTracks().Wait();
+
+            // If the latest scrobble is not a current scrobble, do not show
+            if (recentTracks[0].IsNowPlaying == false || recentTracks[0].IsNowPlaying == null)
+            {
+                Wallpaper.SetWallpaper(Path.GetFullPath("oldwallpaper"));
+                // Erase artistName so artist change is triggered if track is resumed
+                artistName = "";
+                return;
+            }
+            
             // Only update wallpaper if artist changes
             if (!(recentTracks[0].ArtistName == artistName))
             {
                 artistName = recentTracks[0].ArtistName;
+
+                DateTimeOffset? playTime = recentTracks[0].TimePlayed;
+                Console.WriteLine("Artist: " + artistName + "\n");
+                //Console.WriteLine("Time played: " + playTime.Value + "\n");
                 //activeSong = recentTracks[0];
 
                 // Update UI
@@ -136,18 +161,18 @@ namespace LastfmWallpaper
 
         private async Task<string> GetRecentTracks()
         {
+            recentTracks.Clear();
+
             var client = new LastfmClient("f129e1e61eec3e59e1730738845abd1f", null);
 
             var response = await client.User.GetRecentScrobbles(username);
-
-            recentTracks.Clear();
 
             foreach (IF.Lastfm.Core.Objects.LastTrack i in response)
             {
                 recentTracks.Add(i);
             }
 
-            //Console.WriteLine("Artist: " + recentTracks[0].ArtistName);
+            Console.WriteLine("Artist: " + recentTracks[0].ArtistName);
             client.Dispose();
             return recentTracks[0].ArtistName;
         }
