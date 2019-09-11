@@ -22,7 +22,7 @@ namespace LastfmWallpaper
         private bool minimizeToTray = true;
         //private IF.Lastfm.Core.Objects.LastTrack activeSong;
         private List<IF.Lastfm.Core.Objects.LastTrack> recentTracks = new List<IF.Lastfm.Core.Objects.LastTrack>();
-        System.Timers.Timer timer = new System.Timers.Timer(500);
+        System.Timers.Timer timer;
 
         public Form1()
         {
@@ -109,6 +109,7 @@ namespace LastfmWallpaper
         {
             Console.WriteLine("Running");
             Wallpaper.CopyOldWallpaper(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Themes\TranscodedWallpaper"));
+            timer = new System.Timers.Timer(500);
             timer.Elapsed += TimerCall;
             timer.AutoReset = true;
             timer.Enabled = true;
@@ -119,7 +120,7 @@ namespace LastfmWallpaper
         {
             if (!active)
             {
-                timer.Stop();
+                timer.Dispose();
                 Wallpaper.SetWallpaper(Path.GetFullPath("oldwallpaper"));
             }
 
