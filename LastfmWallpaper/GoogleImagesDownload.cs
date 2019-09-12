@@ -6,7 +6,7 @@ namespace LastfmWallpaper
 {
     class GoogleImagesDownload
     {
-        public static void Download(string query)
+        public static void Download(string query, string aspectRatio)
         {
             // Run python bundled exe
             try
@@ -18,7 +18,7 @@ namespace LastfmWallpaper
                 // Run python bundled exe
                 Process proc = new Process();
                 proc.StartInfo.FileName = "google_images_download.exe";
-                proc.StartInfo.Arguments = " -k \"" + query + " desktop wallpaper\" -l 1";
+                proc.StartInfo.Arguments = " -k \"" + query + " music desktop wallpaper\" -l 1 -f jpg -a " + aspectRatio;
                 proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 proc.StartInfo.UseShellExecute = true;
                 proc.Start();
@@ -35,7 +35,7 @@ namespace LastfmWallpaper
                 proc.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
                 proc.StartInfo.UseShellExecute = true;
                 proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.StartInfo.Arguments = "..\\..\\..\\google_images_download\\google_images_download.py -k \"" + query + " desktop wallpaper\" -l 1";
+                proc.StartInfo.Arguments = "..\\..\\..\\google_images_download\\google_images_download.py -k \"" + query + " music desktop wallpaper\" -l 1 -f jpg -a " + aspectRatio;
                 proc.Start();
                 proc.WaitForExit();
                 Console.WriteLine("Used system interpreter." + "\n");

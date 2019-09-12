@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.IO;
+using System;
 
 namespace LastfmWallpaper
 {
@@ -28,5 +29,28 @@ namespace LastfmWallpaper
             }
             File.Copy(path, "oldwallpaper");
         }
+
+        public static string DesktopSizeType(int x, int y)
+        {
+            double value = (double)x / y;
+            if (value < 1)
+            {
+                return "tall";
+            }
+            else if (value == 1)
+            {
+                return "square";
+            }
+            else if (value == (double)16 / 9)
+            {
+                return "wide";
+            }
+            else if (value > ((double)16 / 9))
+            {
+                return "panoramic";
+            }
+            return "wide";
+        }
+
     }
 }

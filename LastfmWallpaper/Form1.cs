@@ -18,6 +18,11 @@ namespace LastfmWallpaper
     {
         private string username;
         private string artistName = "";
+        private string desktopSizeType;
+        private int primaryX;
+        private int primaryY;
+        private int totalX;
+        private int totalY;
         private bool active = false;
         private bool minimizeToTray = true;
         //private IF.Lastfm.Core.Objects.LastTrack activeSong;
@@ -108,6 +113,29 @@ namespace LastfmWallpaper
         private void RequestManager()
         {
             Console.WriteLine("Running");
+
+            // Reset stored resolution values
+            primaryX = 0;
+            primaryY = 0;
+            totalX = 0;
+            totalY = 0;
+
+            primaryX = Screen.PrimaryScreen.Bounds.Width;
+            primaryY = Screen.PrimaryScreen.Bounds.Height;
+            desktopSizeType = Wallpaper.DesktopSizeType(primaryX, primaryY);
+            Console.WriteLine(desktopSizeType);
+
+            /*// Add up resolution of all displays
+            foreach (Screen i in Screen.AllScreens)
+            {
+                totalX += i.Bounds.Width;
+                totalY += i.Bounds.Height;
+            }
+
+            desktopSizeType = Wallpaper.DesktopSizeType(totalX, totalY);*/
+
+
+
             Wallpaper.CopyOldWallpaper(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Themes\TranscodedWallpaper"));
             timer = new System.Timers.Timer(500);
             timer.Elapsed += TimerCall;
@@ -149,14 +177,14 @@ namespace LastfmWallpaper
                 activeSongDisplay.Text = artistName;
 
                 Console.WriteLine("Latest scrobbled artist: " + artistName);
-                GoogleImagesDownload.Download(artistName);
+                GoogleImagesDownload.Download(artistName, desktopSizeType);
 
                 // Create directory object
-                DirectoryInfo di = new DirectoryInfo("downloads/" + artistName + " desktop wallpaper");
+                DirectoryInfo di = new DirectoryInfo("downloads/" + artistName + " music desktop wallpaper");
 
                 // Get name of downloaded image
                 string firstFileName = di.GetFiles().Select(fi => fi.Name).FirstOrDefault(name => name != "Thumbs.db");
-                Wallpaper.SetWallpaper(Path.GetFullPath("downloads\\" + artistName + " desktop wallpaper\\" + firstFileName));
+                Wallpaper.SetWallpaper(Path.GetFullPath("downloads\\" + artistName + " music desktop wallpaper\\" + firstFileName));
             }
         }
 
