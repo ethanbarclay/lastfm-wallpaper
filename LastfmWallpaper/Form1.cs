@@ -134,8 +134,6 @@ namespace LastfmWallpaper
 
             desktopSizeType = Wallpaper.DesktopSizeType(totalX, totalY);*/
 
-
-
             Wallpaper.CopyOldWallpaper(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Themes\TranscodedWallpaper"));
             timer = new System.Timers.Timer(500);
             timer.Elapsed += TimerCall;
@@ -149,7 +147,7 @@ namespace LastfmWallpaper
             if (!active)
             {
                 timer.Dispose();
-                Wallpaper.SetWallpaper(Path.GetFullPath("oldwallpaper"));
+                Wallpaper.SetWallpaper(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Themes\oldwallpaper"));
             }
 
             GetRecentTracks().Wait();
@@ -157,7 +155,7 @@ namespace LastfmWallpaper
             // If the latest scrobble is not a current scrobble, do not show
             if (recentTracks[0].IsNowPlaying == false || recentTracks[0].IsNowPlaying == null)
             {
-                Wallpaper.SetWallpaper(Path.GetFullPath("oldwallpaper"));
+                Wallpaper.SetWallpaper(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Themes\oldwallpaper"));
                 // Erase artistName so artist change is triggered if track is resumed
                 artistName = "";
                 return;

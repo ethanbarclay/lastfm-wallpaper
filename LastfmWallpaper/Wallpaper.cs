@@ -23,11 +23,13 @@ namespace LastfmWallpaper
 
         public static void CopyOldWallpaper(string path)
         {
-            if (File.Exists("oldwallpaper"))
+            string themesFolderPath = Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Themes\");
+
+            if (File.Exists(themesFolderPath + "oldwallpaper"))
             {
-                File.Delete("oldwallpaper");
+                File.Delete(themesFolderPath + "oldwallpaper");
             }
-            File.Copy(path, "oldwallpaper");
+            File.Copy(path, themesFolderPath + "oldwallpaper");
         }
 
         public static string DesktopSizeType(int x, int y)
