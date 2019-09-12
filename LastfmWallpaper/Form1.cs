@@ -10,7 +10,6 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.Win32;
 
 namespace LastfmWallpaper
 {
@@ -74,6 +73,10 @@ namespace LastfmWallpaper
             toggleActive.AutoSize = false;
             Size buttonSize = new Size(64, 56);
             toggleActive.Size = buttonSize;
+            if (File.Exists("username.txt"))
+            {
+                usernameInput.Text = File.ReadAllText("username.txt");
+            }
         }
 
         private void Form1_Resize_1(object sender, EventArgs e)
@@ -113,6 +116,8 @@ namespace LastfmWallpaper
         private void RequestManager()
         {
             Console.WriteLine("Running");
+
+            File.WriteAllText("username.txt", username);
 
             // Reset stored resolution values
             primaryX = 0;
