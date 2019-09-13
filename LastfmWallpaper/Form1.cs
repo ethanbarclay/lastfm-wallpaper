@@ -18,6 +18,7 @@ namespace LastfmWallpaper
         private string username;
         private string artistName = "";
         private string desktopSizeType;
+        private readonly string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Microsocks\\LastfmWallpaper\\";
         private int primaryX;
         private int primaryY;
         private int totalX;
@@ -73,9 +74,15 @@ namespace LastfmWallpaper
             toggleActive.AutoSize = false;
             Size buttonSize = new Size(64, 56);
             toggleActive.Size = buttonSize;
-            if (File.Exists("username.txt"))
+
+            if (!Directory.Exists(appDataFolder))
             {
-                usernameInput.Text = File.ReadAllText("username.txt");
+                Directory.CreateDirectory(appDataFolder);
+            }
+
+            if (File.Exists(appDataFolder + "username.txt"))
+            {
+                usernameInput.Text = File.ReadAllText(appDataFolder + "username.txt");
             }
         }
 
@@ -117,7 +124,7 @@ namespace LastfmWallpaper
         {
             Console.WriteLine("Running");
 
-            File.WriteAllText("username.txt", username);
+            File.WriteAllText(appDataFolder + "username.txt", username);
 
             // Reset stored resolution values
             primaryX = 0;
@@ -180,13 +187,17 @@ namespace LastfmWallpaper
                 activeSongDisplay.Text = artistName;
 
                 Console.WriteLine("Latest scrobbled artist: " + artistName);
+
+                // Download image
                 GoogleImagesDownload.Download(artistName, desktopSizeType);
 
                 // Create directory object
-                DirectoryInfo di = new DirectoryInfo("downloads/" + artistName + " music desktop wallpaper");
+                DirectoryInfo di = new DirectoryInfo("downloads\\" + artistName +" music desktop wallpaper");
 
                 // Get name of downloaded image
                 string firstFileName = di.GetFiles().Select(fi => fi.Name).FirstOrDefault(name => name != "Thumbs.db");
+
+                // Set wallpaper
                 Wallpaper.SetWallpaper(Path.GetFullPath("downloads\\" + artistName + " music desktop wallpaper\\" + firstFileName));
             }
         }
