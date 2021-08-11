@@ -1,15 +1,15 @@
-﻿using MaterialSkin;
+﻿using IF.Lastfm.Core.Api;
+using MaterialSkin;
 using MaterialSkin.Controls;
-using System.Drawing;
 using System;
-using System.Windows.Forms;
-using System.Timers;
-using System.Threading.Tasks;
-using IF.Lastfm.Core.Api;
-using System.IO;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Windows.Forms;
 
 namespace LastfmWallpaper
 {
@@ -21,11 +21,11 @@ namespace LastfmWallpaper
         private readonly string appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Microsocks\\LastfmWallpaper\\";
         private int primaryX;
         private int primaryY;
-        private int totalX;
-        private int totalY;
+        // private int totalX;
+        // private int totalY;
         private bool active = false;
         private bool minimizeToTray = true;
-        //private IF.Lastfm.Core.Objects.LastTrack activeSong;
+        // private IF.Lastfm.Core.Objects.LastTrack activeSong;
         private List<IF.Lastfm.Core.Objects.LastTrack> recentTracks = new List<IF.Lastfm.Core.Objects.LastTrack>();
         System.Timers.Timer timer;
 
@@ -38,7 +38,6 @@ namespace LastfmWallpaper
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
-
 
         private void MaterialRaisedButton1_Click(object sender, System.EventArgs e)
         {
@@ -108,7 +107,7 @@ namespace LastfmWallpaper
             LastfmWallpaper.Visible = false;
         }
 
-        private void MinimizeToTrayToggle_CheckedChanged(object sender, System.EventArgs e)
+        private void MinimizeToTrayToggle_CheckedChanged(object sender, EventArgs e)
         {
             if (minimizeToTrayToggle.CheckState == CheckState.Checked)
             {
@@ -122,15 +121,13 @@ namespace LastfmWallpaper
 
         private void RequestManager()
         {
-            Console.WriteLine("Running");
-
             File.WriteAllText(appDataFolder + "username.txt", username);
 
             // Reset stored resolution values
             primaryX = 0;
             primaryY = 0;
-            totalX = 0;
-            totalY = 0;
+            // totalX = 0;
+            // totalY = 0;
 
             primaryX = Screen.PrimaryScreen.Bounds.Width;
             primaryY = Screen.PrimaryScreen.Bounds.Height;
@@ -165,40 +162,40 @@ namespace LastfmWallpaper
             GetRecentTracks().Wait();
 
             // If the latest scrobble is not a current scrobble, do not show
-            if (recentTracks[0].IsNowPlaying == false || recentTracks[0].IsNowPlaying == null)
+            /*if (recentTracks[0].IsNowPlaying == false || recentTracks[0].IsNowPlaying == null)
             {
                 Wallpaper.SetWallpaper(Path.GetFullPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Themes\oldwallpaper"));
                 // Erase artistName so artist change is triggered if track is resumed
                 artistName = "";
                 return;
-            }
-            
+            }*/
+
             // Only update wallpaper if artist changes
             if (!(recentTracks[0].ArtistName == artistName))
             {
                 artistName = recentTracks[0].ArtistName;
-
                 DateTimeOffset? playTime = recentTracks[0].TimePlayed;
                 Console.WriteLine("Artist: " + artistName + "\n");
                 //Console.WriteLine("Time played: " + playTime.Value + "\n");
                 //activeSong = recentTracks[0];
 
                 // Update UI
-                activeSongDisplay.Text = artistName;
+                updateActiveSongDisplay();
 
+                /*MessageBox.Show(artistName);*/
                 Console.WriteLine("Latest scrobbled artist: " + artistName);
 
                 // Download image
-                GoogleImagesDownload.Download(artistName, desktopSizeType);
+                GoogleImagesDownload.Download(artistName, desktopSizeType).Wait();
 
                 // Create directory object
-                DirectoryInfo di = new DirectoryInfo("downloads\\" + artistName +" music desktop wallpaper");
+                DirectoryInfo di = new DirectoryInfo("downloads\\" + artistName);
 
                 // Get name of downloaded image
                 string firstFileName = di.GetFiles().Select(fi => fi.Name).FirstOrDefault(name => name != "Thumbs.db");
 
                 // Set wallpaper
-                Wallpaper.SetWallpaper(Path.GetFullPath("downloads\\" + artistName + " music desktop wallpaper\\" + firstFileName));
+                Wallpaper.SetWallpaper(Path.GetFullPath("downloads\\" + artistName + "\\" + firstFileName));
             }
         }
 
@@ -218,6 +215,24 @@ namespace LastfmWallpaper
             Console.WriteLine("Artist: " + recentTracks[0].ArtistName);
             client.Dispose();
             return recentTracks[0].ArtistName;
+        }
+
+        // Called from other thread validate operation
+        void updateActiveSongDisplay()
+        {
+            try
+            {
+                if (toggleActive.InvokeRequired)
+                {
+                    toggleActive.Invoke(new Action(updateActiveSongDisplay));
+                    return;
+                }
+                activeSongDisplay.Text = artistName;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
         }
     }
 }

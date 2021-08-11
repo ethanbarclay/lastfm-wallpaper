@@ -1,45 +1,28 @@
-﻿using System;
-using System.Diagnostics;
+﻿using GScraper;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace LastfmWallpaper
 {
     class GoogleImagesDownload
     {
-        public static void Download(string query, string aspectRatio)
+        public static async Task Download(string query, string aspectRatio)
         {
-            // Run python bundled exe
-            try
-            {
-                if (!File.Exists("google_images_download.exe"))
-                {
-                    throw new ArgumentException("Python binary not found.");
-                }
-                // Run python bundled exe
-                Process proc = new Process();
-                proc.StartInfo.FileName = "google_images_download.exe";
-                proc.StartInfo.Arguments = " -k \"" + query + " music desktop wallpaper\" -l 1 -f jpg -a " + aspectRatio;
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.StartInfo.UseShellExecute = true;
-                proc.Start();
-                proc.WaitForExit();
-                Console.WriteLine("Used python bundled exe." + "\n");
+            var scraper = new GoogleScraper();
+            IReadOnlyList<ImageResult> images = await scraper.GetImagesAsync(query + " music wallpaper " + aspectRatio, 1).ConfigureAwait(false);
+            Console.WriteLine($"Link: {images[0].Link}");
+            scraper.Dispose();
 
-            }
-            // Fallback to system interpreter
-            catch
+            Directory.CreateDirectory("downloads");
+            Directory.CreateDirectory("downloads\\" + query);
+            using (WebClient webClient = new WebClient())
             {
-                Process proc = new Process();
-                // Run with source with python system interpreter
-                proc.StartInfo.FileName = "python";
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
-                proc.StartInfo.UseShellExecute = true;
-                proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                proc.StartInfo.Arguments = "..\\..\\..\\google_images_download\\google_images_download.py -k \"" + query + " music desktop wallpaper\" -l 1 -f jpg -a " + aspectRatio;
-                proc.Start();
-                proc.WaitForExit();
-                Console.WriteLine("Used system interpreter." + "\n");
+                webClient.DownloadFile(images[0].Link, "downloads\\" + query + "\\image.jpg");
             }
+            Console.WriteLine("Downloaded");
         }
     }
 }
