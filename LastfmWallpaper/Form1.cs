@@ -39,7 +39,7 @@ namespace LastfmWallpaper
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
 
-        private void MaterialRaisedButton1_Click(object sender, System.EventArgs e)
+        private void MaterialRaisedButton1_Click(object sender, EventArgs e)
         {
             // Set bools and ui
             if (!active)
@@ -63,6 +63,13 @@ namespace LastfmWallpaper
                 // Start running
                 RequestManager();
             }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            active = false;
+            usernameInput.Enabled = true;
+            toggleActive.Text = "START";
         }
 
         private void Form1_Load(object sender, EventArgs e)
