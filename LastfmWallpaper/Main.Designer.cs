@@ -1,6 +1,6 @@
 ﻿namespace LastfmWallpaper
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -29,13 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.toggleActive = new MaterialSkin.Controls.MaterialRaisedButton();
             this.usernameInput = new MaterialSkin.Controls.MaterialSingleLineTextField();
-            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
+            this.listeningToLabel = new MaterialSkin.Controls.MaterialLabel();
             this.activeSongDisplay = new MaterialSkin.Controls.MaterialLabel();
             this.minimizeToTrayToggle = new MaterialSkin.Controls.MaterialCheckBox();
             this.LastfmWallpaper = new System.Windows.Forms.NotifyIcon(this.components);
+            this.settingsButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
             // 
             // toggleActive
@@ -44,7 +45,8 @@
             this.toggleActive.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.toggleActive.Depth = 0;
             this.toggleActive.Icon = null;
-            this.toggleActive.Location = new System.Drawing.Point(12, 125);
+            this.toggleActive.Location = new System.Drawing.Point(12, 124);
+            this.toggleActive.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.toggleActive.MouseState = MaterialSkin.MouseState.HOVER;
             this.toggleActive.Name = "toggleActive";
             this.toggleActive.Primary = true;
@@ -58,7 +60,8 @@
             // 
             this.usernameInput.Depth = 0;
             this.usernameInput.Hint = "";
-            this.usernameInput.Location = new System.Drawing.Point(82, 125);
+            this.usernameInput.Location = new System.Drawing.Point(82, 124);
+            this.usernameInput.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.usernameInput.MaxLength = 32767;
             this.usernameInput.MouseState = MaterialSkin.MouseState.HOVER;
             this.usernameInput.Name = "usernameInput";
@@ -72,18 +75,18 @@
             this.usernameInput.Text = "Username";
             this.usernameInput.UseSystemPasswordChar = false;
             // 
-            // materialLabel1
+            // listeningToLabel
             // 
-            this.materialLabel1.AutoSize = true;
-            this.materialLabel1.Depth = 0;
-            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel1.Location = new System.Drawing.Point(12, 74);
-            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(96, 19);
-            this.materialLabel1.TabIndex = 3;
-            this.materialLabel1.Text = "Listening To:";
+            this.listeningToLabel.AutoSize = true;
+            this.listeningToLabel.Depth = 0;
+            this.listeningToLabel.Font = new System.Drawing.Font("Roboto", 11F);
+            this.listeningToLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.listeningToLabel.Location = new System.Drawing.Point(12, 74);
+            this.listeningToLabel.MouseState = MaterialSkin.MouseState.HOVER;
+            this.listeningToLabel.Name = "listeningToLabel";
+            this.listeningToLabel.Size = new System.Drawing.Size(96, 19);
+            this.listeningToLabel.TabIndex = 3;
+            this.listeningToLabel.Text = "Listening To:";
             // 
             // activeSongDisplay
             // 
@@ -93,7 +96,7 @@
             this.activeSongDisplay.Location = new System.Drawing.Point(12, 97);
             this.activeSongDisplay.MouseState = MaterialSkin.MouseState.HOVER;
             this.activeSongDisplay.Name = "activeSongDisplay";
-            this.activeSongDisplay.Size = new System.Drawing.Size(199, 19);
+            this.activeSongDisplay.Size = new System.Drawing.Size(200, 19);
             this.activeSongDisplay.TabIndex = 4;
             this.activeSongDisplay.Text = "Artist";
             // 
@@ -104,7 +107,7 @@
             this.minimizeToTrayToggle.CheckState = System.Windows.Forms.CheckState.Checked;
             this.minimizeToTrayToggle.Depth = 0;
             this.minimizeToTrayToggle.Font = new System.Drawing.Font("Roboto", 10F);
-            this.minimizeToTrayToggle.Location = new System.Drawing.Point(78, 151);
+            this.minimizeToTrayToggle.Location = new System.Drawing.Point(78, 150);
             this.minimizeToTrayToggle.Margin = new System.Windows.Forms.Padding(0);
             this.minimizeToTrayToggle.MouseLocation = new System.Drawing.Point(-1, -1);
             this.minimizeToTrayToggle.MouseState = MaterialSkin.MouseState.HOVER;
@@ -122,18 +125,41 @@
             this.LastfmWallpaper.Text = "Lastfm Wallpaper";
             this.LastfmWallpaper.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick_1);
             // 
-            // Form1
+            // settingsButton
+            // 
+            this.settingsButton.AutoSize = true;
+            this.settingsButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.settingsButton.Depth = 0;
+            this.settingsButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.settingsButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.settingsButton.Icon = null;
+            this.settingsButton.Location = new System.Drawing.Point(179, 26);
+            this.settingsButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.settingsButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Primary = false;
+            this.settingsButton.Size = new System.Drawing.Size(33, 36);
+            this.settingsButton.TabIndex = 6;
+            this.settingsButton.Text = "⚙";
+            this.settingsButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.settingsButton.UseVisualStyleBackColor = true;
+            this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
+            // 
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(223, 196);
+            this.ClientSize = new System.Drawing.Size(224, 197);
+            this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.minimizeToTrayToggle);
             this.Controls.Add(this.activeSongDisplay);
-            this.Controls.Add(this.materialLabel1);
+            this.Controls.Add(this.listeningToLabel);
             this.Controls.Add(this.usernameInput);
             this.Controls.Add(this.toggleActive);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "Main";
             this.Sizable = false;
             this.Text = "Lastfm Wallpaper";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -147,10 +173,11 @@
 
         private MaterialSkin.Controls.MaterialRaisedButton toggleActive;
         private MaterialSkin.Controls.MaterialSingleLineTextField usernameInput;
-        private MaterialSkin.Controls.MaterialLabel materialLabel1;
+        private MaterialSkin.Controls.MaterialLabel listeningToLabel;
         private MaterialSkin.Controls.MaterialLabel activeSongDisplay;
         private MaterialSkin.Controls.MaterialCheckBox minimizeToTrayToggle;
         private System.Windows.Forms.NotifyIcon LastfmWallpaper;
+        private MaterialSkin.Controls.MaterialFlatButton settingsButton;
     }
 }
 

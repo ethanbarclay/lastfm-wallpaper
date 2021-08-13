@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace LastfmWallpaper
 {
-    public partial class Form1 : MaterialForm
+    public partial class Main : MaterialForm
     {
         private string username;
         private string artistName = "";
@@ -29,7 +29,7 @@ namespace LastfmWallpaper
         private List<IF.Lastfm.Core.Objects.LastTrack> recentTracks = new List<IF.Lastfm.Core.Objects.LastTrack>();
         System.Timers.Timer timer;
 
-        public Form1()
+        public Main()
         {
             InitializeComponent();
             // AllocConsole(); // Launch console for debugging
@@ -210,7 +210,7 @@ namespace LastfmWallpaper
         {
             recentTracks.Clear();
 
-            var client = new LastfmClient("f129e1e61eec3e59e1730738845abd1f", null);
+            var client = new LastfmClient(Globals.InitVars.apiKey, null);
 
             var response = await client.User.GetRecentScrobbles(username);
 
@@ -240,6 +240,17 @@ namespace LastfmWallpaper
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+
+        private void settingsButton_Click(object sender, EventArgs e)
+        {
+            // Pause
+            active = false;
+            usernameInput.Enabled = true;
+            toggleActive.Text = "START";
+
+            Form settingsForm = new Settings();
+            settingsForm.ShowDialog();
         }
     }
 }
